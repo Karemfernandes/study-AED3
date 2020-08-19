@@ -1,0 +1,180 @@
+#include <iostream>
+
+using namespace std;
+
+class celula
+{
+private:
+	string nome, sexo, bebe;
+	int idade;
+	celula * proxima;
+public:
+	celula()
+	{
+		proxima = NULL;
+	}
+	celula(string n,  string s, string b, int i)
+	{
+		nome = n;
+		sexo = s;
+		bebe = b;
+		idade = i;
+	}
+	
+	celula(string n,string s, string b, int i, celula *p){
+		nome = n;
+		sexo = s;
+		bebe = b;
+		idade = i;
+		proxima = p;
+	}
+
+	string getNome()
+	{
+		return nome;
+	}
+	void setNome(string n)
+	{
+		nome = n;
+	}
+	string getSexo()
+	{
+		return sexo;
+	}
+	void setSexo(string s)
+	{
+		sexo = s;
+	}
+	string getBebe()
+	{
+		return bebe;
+	}
+	void setBebe(string b)
+	{
+		bebe= b;
+	}
+	int getIdade()
+	{
+		return idade;
+	}
+	void setIdade(int i)
+	{
+		idade = i;
+	}
+
+	celula * getProxima()
+	{
+		return proxima;
+	}
+
+	void setProxima(celula * l)
+	{
+		proxima = l;
+	}
+};
+
+
+class lista
+{
+private:
+	celula * inicio;
+
+public:
+	lista()
+	{
+		inicio = NULL;
+	}
+	lista(celula *i)
+	{
+		inicio = i;
+	}
+	~lista()
+	{
+		esvaziar();
+		cout << "\nPassou no metodo destrutor";
+	}
+	celula * getInicio()
+	{
+		return inicio;
+	}
+
+	void setInicio(celula *i)
+	{
+		inicio = i;
+	}
+
+	void inserirInicio(string n, string s, string b, int i)
+	{
+		celula *nova = new celula;
+		nova->setNome(n);
+		nova->setSexo(s);
+		nova->setBebe(b);
+		nova->setIdade(i);
+		nova->setProxima(inicio);
+		inicio = nova;
+	}
+
+	void inserirFim(string n, string s, string b, int i)
+	{
+		celula *nova = new celula(n, s, b, i,  NULL);
+		//nova->setNome(n);
+		//nova->setProxima(NULL);
+		if(inicio == NULL)
+		{
+			inicio = nova;
+		}
+		else
+		{
+			celula *aux = inicio;
+			while(aux->getProxima() != NULL)
+			{
+				aux = aux->getProxima();
+			}
+			aux->setProxima(nova);
+		}
+	}
+
+
+	void imprimir()
+	{
+		if(inicio == NULL)
+		{
+			cout << "Lista vazia.\n";
+		}
+		else
+		{
+			celula *aux = inicio;
+			while(aux != NULL)
+			{
+				cout << aux->getNome() << aux->getSexo() << aux->getBebe() << aux->getIdade << endl;
+				aux = aux->getProxima();
+			}
+		}
+	}
+
+	void esvaziar()
+	{
+		celula *aux = inicio;
+		while(aux != NULL)
+		{
+			inicio = inicio->getProxima();
+			delete aux;
+			aux = inicio;
+		}
+		cout << "\nLista esvaziada com sucesso.";
+	}
+
+
+};
+
+int main()
+{
+	lista listaChurrasco;
+	listaChurrasco.inserirInicio("Larissa - ", " - Feminino - ", "- Bebe - ", 30 );
+	listaChurrasco.inserirInicio("Clara - ", " - Feminino - ", "-  Não Bebe - " ,17 );
+    listaChurrasco.inserirFim("João - ", " -Masculino -", "- Não Bebe-", 25 );
+	listaChurrasco.esvaziar();
+	listaChurrasco.inserirFim("Diego -", " - Masculino- ", "- Bebe -", 31);
+	listaChurrasco.imprimir();
+	return 0;
+}
